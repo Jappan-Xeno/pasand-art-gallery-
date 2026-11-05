@@ -5,13 +5,12 @@ import confetti from 'canvas-confetti';
 import {
   X,
   MessageCircle,
-  Truck,
-  ShieldCheck,
   CheckCircle2,
   Copy,
   ExternalLink,
   Sparkles,
-  ArrowRight,
+  Phone,
+  ShieldCheck,
 } from 'lucide-react';
 
 export const CheckoutModal: React.FC = () => {
@@ -51,9 +50,9 @@ export const CheckoutModal: React.FC = () => {
     const errs: Partial<CustomerDetails> = {};
     if (!formData.name.trim()) errs.name = 'Full name is required';
     if (!formData.phone.trim()) {
-      errs.phone = 'Phone number is required';
+      errs.phone = 'Mobile number is required';
     } else if (!/^[0-9]{10}$/.test(formData.phone.replace(/[^0-9]/g, ''))) {
-      errs.phone = 'Please provide a valid 10-digit mobile number';
+      errs.phone = 'Please enter a valid 10-digit number';
     }
     if (!formData.address.trim()) errs.address = 'Delivery address is required';
     if (!formData.city.trim()) errs.city = 'City is required';
@@ -68,7 +67,7 @@ export const CheckoutModal: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate()) {
-      showToast('Form Incomplete', 'Please fill in all delivery details.', 'info');
+      showToast('Details Missing', 'Please fill in all delivery fields.', 'info');
       return;
     }
 
@@ -76,18 +75,23 @@ export const CheckoutModal: React.FC = () => {
     const result = placeOrder(formData);
     setCompletedOrder(result);
 
-    // Launch celebratory confetti!
+    // Launch celebratory confetti
     try {
       confetti({
-        particleCount: 80,
-        spread: 70,
+        particleCount: 70,
+        spread: 60,
         origin: { y: 0.6 },
-        colors: ['#C6A15B', '#E8D5B7', '#123D32', '#FFFDF7'],
+        colors: ['#F5D77F', '#D4AF37', '#103328', '#FFFDF7'],
       });
     } catch {}
 
-    // Automatically open WhatsApp in a new tab
-    window.open(result.whatsappUrl, '_blank');
+    // On mobile devices, redirect directly to WhatsApp app URL
+    const isMobileDevice = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    if (isMobileDevice) {
+      window.location.href = result.whatsappUrl;
+    } else {
+      window.open(result.whatsappUrl, '_blank');
+    }
   };
 
   const handleCopySummary = () => {
@@ -104,140 +108,129 @@ export const CheckoutModal: React.FC = () => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="relative w-full max-w-2xl bg-[#092820] rounded-3xl border border-[#C6A15B]/40 shadow-2xl p-6 sm:p-8 overflow-hidden max-h-[92vh] flex flex-col">
-        {/* Close Button */}
-        <button
-          onClick={handleClose}
-          className="absolute top-5 right-5 p-2 text-[#E8D5B7] hover:text-[#FFFDF7] rounded-full hover:bg-[#123D32] transition-colors"
-        >
-          <X className="w-5 h-5" />
-        </button>
+    <div className="fixed inset-0 z-50 overflow-y-auto flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/85 backdrop-blur-md animate-in fade-in duration-200">
+      <div className="relative w-full max-w-lg bg-[#071F18] rounded-t-3xl sm:rounded-3xl border-t-2 sm:border-2 border-[#D4AF37]/50 shadow-2xl p-5 sm:p-7 overflow-hidden max-h-[92dvh] flex flex-col">
+        {/* Top Header / Close */}
+        <div className="flex items-center justify-between pb-3 border-b border-[#D4AF37]/25 shrink-0">
+          <div className="flex items-center gap-2">
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="text-xs font-brand tracking-[0.2em] text-[#F5D77F] uppercase font-bold">
+              {completedOrder ? 'Order Confirmed' : 'WhatsApp Express Order'}
+            </span>
+          </div>
+
+          <button
+            onClick={handleClose}
+            className="p-1.5 rounded-full text-[#E8D5B7] hover:text-white bg-[#04140F] border border-[#D4AF37]/30"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
 
         {completedOrder ? (
-          /* Success Screen */
-          <div className="text-center py-6 space-y-6 overflow-y-auto flex-1">
-            <div className="w-16 h-16 rounded-full bg-emerald-950 border border-emerald-500/50 flex items-center justify-center text-emerald-400 mx-auto animate-bounce">
+          /* Success Screen with Big Mobile-Friendly WhatsApp Button */
+          <div className="text-center py-5 space-y-5 overflow-y-auto flex-1">
+            <div className="w-16 h-16 rounded-full bg-emerald-950 border-2 border-emerald-400 flex items-center justify-center text-emerald-400 mx-auto shadow-[0_0_20px_rgba(52,211,153,0.3)] animate-bounce">
               <CheckCircle2 className="w-9 h-9" />
             </div>
 
             <div>
-              <span className="text-xs uppercase font-brand tracking-[0.25em] text-[#C6A15B]">
-                Order Registered Successfully
-              </span>
-              <h2 className="text-2xl sm:text-3xl font-serif-luxury font-medium text-[#FFFDF7] mt-1">
-                Thank You, {completedOrder.order.customer.name}!
+              <h2 className="text-2xl font-serif-luxury font-medium text-[#FFFDF7]">
+                Order Ready to Dispatch!
               </h2>
-              <p className="text-sm text-[#E8D5B7]/80 mt-2 max-w-md mx-auto">
-                Your order{' '}
-                <strong className="text-[#FFFDF7]">#{completedOrder.order.id}</strong> has been
-                logged and prepared for WhatsApp transmission to our concierge.
+              <p className="text-xs text-[#E8D5B7]/80 mt-1 max-w-sm mx-auto">
+                Reference: <strong className="text-[#F5D77F] font-mono">#{completedOrder.order.id}</strong>. Tap below to send this order directly to our WhatsApp Concierge.
               </p>
             </div>
 
-            {/* Order Card Summary */}
-            <div className="p-5 rounded-2xl bg-[#0E332A] border border-[#C6A15B]/30 text-left max-w-md mx-auto space-y-3">
-              <div className="flex justify-between items-center text-xs pb-3 border-b border-[#C6A15B]/20">
-                <span className="text-[#E8D5B7]/70">Order Reference</span>
-                <span className="text-[#C6A15B] font-mono font-bold">
-                  #{completedOrder.order.id}
-                </span>
-              </div>
+            {/* Big Green Direct WhatsApp Button */}
+            <div className="space-y-3 max-w-md mx-auto pt-2">
+              <a
+                href={completedOrder.whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full py-4 px-6 rounded-2xl bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white font-bold text-sm sm:text-base tracking-wider uppercase flex items-center justify-center gap-2.5 shadow-[0_10px_30px_rgba(16,185,129,0.4)] transition-all cursor-pointer animate-pulse"
+              >
+                <MessageCircle className="w-6 h-6 fill-current" />
+                <span>OPEN WHATSAPP NOW</span>
+                <ExternalLink className="w-4 h-4 ml-1" />
+              </a>
 
-              <div className="text-xs space-y-1.5 text-[#E8D5B7]">
-                <p>
-                  <strong className="text-[#FFFDF7]">Recipient:</strong>{' '}
-                  {completedOrder.order.customer.name} ({completedOrder.order.customer.phone})
-                </p>
-                <p>
-                  <strong className="text-[#FFFDF7]">Deliver to:</strong>{' '}
-                  {completedOrder.order.customer.address}, {completedOrder.order.customer.city},{' '}
-                  {completedOrder.order.customer.state} - {completedOrder.order.customer.pincode}
-                </p>
-                <p>
-                  <strong className="text-[#FFFDF7]">Items ({completedOrder.order.items.length}):</strong>{' '}
-                  {completedOrder.order.items.map((i) => i.productName).join(', ')}
-                </p>
-              </div>
+              <p className="text-[11px] text-emerald-400 font-medium">
+                ✓ Pre-formatted royal invoice ready to send
+              </p>
+            </div>
 
-              <div className="flex justify-between items-center text-base font-semibold text-[#FFFDF7] pt-3 border-t border-[#C6A15B]/20">
+            {/* Summary preview */}
+            <div className="p-4 rounded-2xl bg-[#04140F] border border-[#D4AF37]/30 text-left text-xs space-y-2 max-w-md mx-auto">
+              <div className="flex justify-between font-semibold text-[#FFFDF7] border-b border-[#D4AF37]/20 pb-2">
+                <span>Customer: {completedOrder.order.customer.name}</span>
+                <span className="text-[#F5D77F] font-mono">{completedOrder.order.customer.phone}</span>
+              </div>
+              <p className="text-[#E8D5B7]/80 truncate">
+                Address: {completedOrder.order.customer.address}, {completedOrder.order.customer.city}
+              </p>
+              <div className="flex justify-between text-sm font-bold text-[#FFFDF7] pt-2 border-t border-[#D4AF37]/20">
                 <span>Grand Total:</span>
-                <span className="font-sans text-xl gold-gradient-text">
+                <span className="gold-foil-text text-base">
                   {settings.currencySymbol}
                   {completedOrder.order.total.toLocaleString('en-IN')}
                 </span>
               </div>
             </div>
 
-            {/* Actions */}
-            <div className="space-y-3 max-w-md mx-auto">
-              <a
-                href={completedOrder.whatsappUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full py-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-sm tracking-wide flex items-center justify-center gap-2 shadow-lg shadow-emerald-900/40 transition-all cursor-pointer"
+            {/* Return CTA */}
+            <div className="flex gap-2 max-w-md mx-auto">
+              <button
+                onClick={handleCopySummary}
+                className="flex-1 py-3 rounded-xl border border-[#D4AF37]/40 text-xs text-[#E8D5B7] flex items-center justify-center gap-1.5"
               >
-                <MessageCircle className="w-5 h-5" />
-                <span>Open WhatsApp & Send Order</span>
-                <ExternalLink className="w-4 h-4 ml-1" />
-              </a>
-
-              <div className="flex gap-2">
-                <button
-                  onClick={handleCopySummary}
-                  className="flex-1 py-2.5 rounded-xl border border-[#C6A15B]/30 hover:border-[#C6A15B] text-xs text-[#E8D5B7] flex items-center justify-center gap-1.5 transition-colors"
-                >
-                  <Copy className="w-3.5 h-3.5" />
-                  <span>Copy Reference</span>
-                </button>
-                <button
-                  onClick={handleClose}
-                  className="flex-1 py-2.5 rounded-xl gold-gradient-bg text-[#092820] font-semibold text-xs transition-opacity hover:opacity-95"
-                >
-                  Continue Shopping
-                </button>
-              </div>
+                <Copy className="w-3.5 h-3.5" />
+                <span>Copy Summary</span>
+              </button>
+              <button
+                onClick={handleClose}
+                className="flex-1 py-3 rounded-xl gold-foil-bg text-[#061B15] font-bold text-xs uppercase"
+              >
+                Done / Continue
+              </button>
             </div>
           </div>
         ) : (
-          /* Delivery Details Form */
-          <div className="overflow-y-auto flex-1 pr-1">
-            <div className="mb-6">
-              <div className="inline-flex items-center gap-2 text-xs font-brand tracking-[0.25em] text-[#C6A15B] uppercase mb-1">
-                <Sparkles className="w-3.5 h-3.5" />
-                <span>Boutique Order Details</span>
-              </div>
-              <h2 className="text-2xl font-serif-luxury font-medium text-[#FFFDF7]">
-                Delivery Address & WhatsApp Checkout
+          /* Delivery Details Form with Sticky/Reachable WhatsApp Submit */
+          <div className="overflow-y-auto flex-1 py-3 space-y-4">
+            <div className="text-left">
+              <h2 className="text-xl font-serif-luxury font-medium text-[#FFFDF7]">
+                Delivery Address
               </h2>
-              <p className="text-xs text-[#E8D5B7]/70 mt-1">
-                Provide your destination details. Your order will be seamlessly formatted and sent to the Pasand Art Gallery boutique WhatsApp number ({settings.whatsappDisplayNumber}).
+              <p className="text-[11px] text-[#E8D5B7]/75">
+                Fill details to send order directly to Pasand Art Gallery WhatsApp.
               </p>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <form onSubmit={handleSubmit} className="space-y-3.5 text-left">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {/* Full Name */}
                 <div>
-                  <label className="block text-xs font-medium text-[#E8D5B7] mb-1">
-                    Full Name *
+                  <label className="block text-[11px] font-semibold text-[#F5D77F] mb-1">
+                    Your Full Name *
                   </label>
                   <input
                     type="text"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    placeholder="e.g. Radhika Sharma"
-                    className={`w-full px-3.5 py-2.5 rounded-xl bg-[#0E332A] border text-xs text-[#FFFDF7] placeholder-[#E8D5B7]/40 focus:outline-none ${
-                      errors.name ? 'border-rose-500' : 'border-[#C6A15B]/30 focus:border-[#C6A15B]'
+                    placeholder="e.g. Priyanka Sharma"
+                    className={`w-full px-3.5 py-2.5 rounded-xl bg-[#04140F] border text-xs text-[#FFFDF7] placeholder-[#E8D5B7]/40 focus:outline-none ${
+                      errors.name ? 'border-rose-500' : 'border-[#D4AF37]/40 focus:border-[#F5D77F]'
                     }`}
                   />
-                  {errors.name && <p className="text-[11px] text-rose-400 mt-1">{errors.name}</p>}
+                  {errors.name && <p className="text-[10px] text-rose-400 mt-0.5">{errors.name}</p>}
                 </div>
 
                 {/* Mobile Phone */}
                 <div>
-                  <label className="block text-xs font-medium text-[#E8D5B7] mb-1">
-                    WhatsApp Phone Number *
+                  <label className="block text-[11px] font-semibold text-[#F5D77F] mb-1">
+                    WhatsApp Mobile Number *
                   </label>
                   <div className="relative">
                     <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs text-[#E8D5B7]/60">
@@ -254,72 +247,72 @@ export const CheckoutModal: React.FC = () => {
                         })
                       }
                       placeholder="9876543210"
-                      className={`w-full pl-11 pr-3.5 py-2.5 rounded-xl bg-[#0E332A] border text-xs text-[#FFFDF7] placeholder-[#E8D5B7]/40 focus:outline-none ${
+                      className={`w-full pl-11 pr-3.5 py-2.5 rounded-xl bg-[#04140F] border text-xs text-[#FFFDF7] placeholder-[#E8D5B7]/40 focus:outline-none ${
                         errors.phone
                           ? 'border-rose-500'
-                          : 'border-[#C6A15B]/30 focus:border-[#C6A15B]'
+                          : 'border-[#D4AF37]/40 focus:border-[#F5D77F]'
                       }`}
                     />
                   </div>
-                  {errors.phone && <p className="text-[11px] text-rose-400 mt-1">{errors.phone}</p>}
+                  {errors.phone && <p className="text-[10px] text-rose-400 mt-0.5">{errors.phone}</p>}
                 </div>
               </div>
 
-              {/* Street Address */}
+              {/* Address */}
               <div>
-                <label className="block text-xs font-medium text-[#E8D5B7] mb-1">
-                  Street Address, Apartment / House No. *
+                <label className="block text-[11px] font-semibold text-[#F5D77F] mb-1">
+                  Complete Delivery Address *
                 </label>
                 <input
                   type="text"
                   value={formData.address}
                   onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                  placeholder="e.g. 402 Royal Palms, MG Road"
-                  className={`w-full px-3.5 py-2.5 rounded-xl bg-[#0E332A] border text-xs text-[#FFFDF7] placeholder-[#E8D5B7]/40 focus:outline-none ${
+                  placeholder="House/Flat No., Street, Landmark"
+                  className={`w-full px-3.5 py-2.5 rounded-xl bg-[#04140F] border text-xs text-[#FFFDF7] placeholder-[#E8D5B7]/40 focus:outline-none ${
                     errors.address
                       ? 'border-rose-500'
-                      : 'border-[#C6A15B]/30 focus:border-[#C6A15B]'
+                      : 'border-[#D4AF37]/40 focus:border-[#F5D77F]'
                   }`}
                 />
                 {errors.address && (
-                  <p className="text-[11px] text-rose-400 mt-1">{errors.address}</p>
+                  <p className="text-[10px] text-rose-400 mt-0.5">{errors.address}</p>
                 )}
               </div>
 
               {/* City, State, PIN */}
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-3 gap-2 sm:gap-3">
                 <div>
-                  <label className="block text-xs font-medium text-[#E8D5B7] mb-1">City *</label>
+                  <label className="block text-[11px] font-semibold text-[#F5D77F] mb-1">City *</label>
                   <input
                     type="text"
                     value={formData.city}
                     onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-                    placeholder="e.g. Mumbai"
-                    className={`w-full px-3 py-2.5 rounded-xl bg-[#0E332A] border text-xs text-[#FFFDF7] placeholder-[#E8D5B7]/40 focus:outline-none ${
-                      errors.city ? 'border-rose-500' : 'border-[#C6A15B]/30 focus:border-[#C6A15B]'
+                    placeholder="Mumbai"
+                    className={`w-full px-2.5 sm:px-3 py-2.5 rounded-xl bg-[#04140F] border text-xs text-[#FFFDF7] placeholder-[#E8D5B7]/40 focus:outline-none ${
+                      errors.city ? 'border-rose-500' : 'border-[#D4AF37]/40 focus:border-[#F5D77F]'
                     }`}
                   />
-                  {errors.city && <p className="text-[11px] text-rose-400 mt-1">{errors.city}</p>}
+                  {errors.city && <p className="text-[10px] text-rose-400 mt-0.5">{errors.city}</p>}
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-[#E8D5B7] mb-1">State *</label>
+                  <label className="block text-[11px] font-semibold text-[#F5D77F] mb-1">State *</label>
                   <input
                     type="text"
                     value={formData.state}
                     onChange={(e) => setFormData({ ...formData, state: e.target.value })}
-                    placeholder="e.g. Maharashtra"
-                    className={`w-full px-3 py-2.5 rounded-xl bg-[#0E332A] border text-xs text-[#FFFDF7] placeholder-[#E8D5B7]/40 focus:outline-none ${
+                    placeholder="State"
+                    className={`w-full px-2.5 sm:px-3 py-2.5 rounded-xl bg-[#04140F] border text-xs text-[#FFFDF7] placeholder-[#E8D5B7]/40 focus:outline-none ${
                       errors.state
                         ? 'border-rose-500'
-                        : 'border-[#C6A15B]/30 focus:border-[#C6A15B]'
+                        : 'border-[#D4AF37]/40 focus:border-[#F5D77F]'
                     }`}
                   />
-                  {errors.state && <p className="text-[11px] text-rose-400 mt-1">{errors.state}</p>}
+                  {errors.state && <p className="text-[10px] text-rose-400 mt-0.5">{errors.state}</p>}
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-[#E8D5B7] mb-1">PIN Code *</label>
+                  <label className="block text-[11px] font-semibold text-[#F5D77F] mb-1">PIN *</label>
                   <input
                     type="text"
                     maxLength={6}
@@ -331,36 +324,22 @@ export const CheckoutModal: React.FC = () => {
                       })
                     }
                     placeholder="400001"
-                    className={`w-full px-3 py-2.5 rounded-xl bg-[#0E332A] border text-xs text-[#FFFDF7] placeholder-[#E8D5B7]/40 focus:outline-none ${
+                    className={`w-full px-2.5 sm:px-3 py-2.5 rounded-xl bg-[#04140F] border text-xs text-[#FFFDF7] placeholder-[#E8D5B7]/40 focus:outline-none ${
                       errors.pincode
                         ? 'border-rose-500'
-                        : 'border-[#C6A15B]/30 focus:border-[#C6A15B]'
+                        : 'border-[#D4AF37]/40 focus:border-[#F5D77F]'
                     }`}
                   />
                   {errors.pincode && (
-                    <p className="text-[11px] text-rose-400 mt-1">{errors.pincode}</p>
+                    <p className="text-[10px] text-rose-400 mt-0.5">{errors.pincode}</p>
                   )}
                 </div>
               </div>
 
-              {/* Order Notes */}
-              <div>
-                <label className="block text-xs font-medium text-[#E8D5B7] mb-1">
-                  Gift Message or Special Instructions (Optional)
-                </label>
-                <textarea
-                  rows={2}
-                  value={formData.orderNotes}
-                  onChange={(e) => setFormData({ ...formData, orderNotes: e.target.value })}
-                  placeholder="e.g. Please add royal gift wrap and handle with care."
-                  className="w-full px-3.5 py-2 rounded-xl bg-[#0E332A] border border-[#C6A15B]/30 text-xs text-[#FFFDF7] placeholder-[#E8D5B7]/40 focus:outline-none focus:border-[#C6A15B]"
-                />
-              </div>
-
               {/* Order Brief Summary */}
-              <div className="p-4 rounded-xl bg-[#0E332A]/70 border border-[#C6A15B]/20 text-xs space-y-1.5">
+              <div className="p-3.5 rounded-xl bg-[#04140F] border border-[#D4AF37]/30 text-xs space-y-1.5">
                 <div className="flex justify-between text-[#E8D5B7]">
-                  <span>Items Total ({cart.reduce((s, i) => s + i.quantity, 0)})</span>
+                  <span>Items in Bag ({cart.reduce((s, i) => s + i.quantity, 0)})</span>
                   <span className="font-sans">
                     {settings.currencySymbol}
                     {cartSubtotal.toLocaleString('en-IN')}
@@ -377,25 +356,29 @@ export const CheckoutModal: React.FC = () => {
                 )}
                 <div className="flex justify-between text-[#E8D5B7]">
                   <span>Delivery</span>
-                  <span>{cartShipping === 0 ? 'FREE' : `${settings.currencySymbol}${cartShipping}`}</span>
+                  <span className="text-emerald-400 font-semibold">{cartShipping === 0 ? 'FREE' : `${settings.currencySymbol}${cartShipping}`}</span>
                 </div>
-                <div className="flex justify-between font-bold text-sm text-[#FFFDF7] pt-2 border-t border-[#C6A15B]/20">
+                <div className="flex justify-between font-bold text-sm text-[#FFFDF7] pt-2 border-t border-[#D4AF37]/20">
                   <span>Grand Total</span>
-                  <span className="font-sans text-base text-[#C6A15B]">
+                  <span className="font-sans text-base text-[#F5D77F]">
                     {settings.currencySymbol}
                     {cartTotal.toLocaleString('en-IN')}
                   </span>
                 </div>
               </div>
 
-              {/* Submit CTA */}
+              {/* Primary Mobile Submit Button */}
               <button
                 type="submit"
-                className="w-full py-4 rounded-xl gold-gradient-bg text-[#092820] font-semibold text-xs sm:text-sm tracking-wider uppercase hover:opacity-95 transition-all shadow-xl shadow-[#C6A15B]/20 flex items-center justify-center gap-2 cursor-pointer mt-4"
+                className="w-full py-4 px-4 rounded-2xl bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white font-bold text-sm tracking-wider uppercase shadow-[0_10px_25px_rgba(16,185,129,0.35)] flex items-center justify-center gap-2 cursor-pointer transition-all"
               >
-                <MessageCircle className="w-5 h-5" />
-                <span>Place Order via WhatsApp ({settings.currencySymbol}{cartTotal.toLocaleString('en-IN')})</span>
+                <MessageCircle className="w-5 h-5 fill-current" />
+                <span>SEND ORDER VIA WHATSAPP ({settings.currencySymbol}{cartTotal.toLocaleString('en-IN')})</span>
               </button>
+
+              <p className="text-[10px] text-center text-[#E8D5B7]/60">
+                🔒 Sends order details directly to Pasand Art Gallery WhatsApp ({settings.whatsappDisplayNumber})
+              </p>
             </form>
           </div>
         )}
@@ -403,4 +386,3 @@ export const CheckoutModal: React.FC = () => {
     </div>
   );
 };
-

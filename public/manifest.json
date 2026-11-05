@@ -1,0 +1,18 @@
+{
+  "name": "Pasand Art Gallery",
+  "short_name": "Pasand",
+  "description": "Luxury Indian Boutique for Jewellery, Fragrances & Accessories",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#04140F",
+  "theme_color": "#D4AF37",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

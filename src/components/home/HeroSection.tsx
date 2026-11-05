@@ -63,12 +63,12 @@ export const HeroSection: React.FC = () => {
   };
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+    <div className="w-full max-w-7xl mx-auto px-3.5 sm:px-6 lg:px-8 py-2.5 sm:py-3 overflow-hidden">
       {/* Full-width Grand Luxury Card with Rich Gold Border */}
-      <div className="relative w-full rounded-3xl overflow-hidden border-2 border-[#D4AF37]/50 hover:border-[#F5D77F] bg-gradient-to-r from-[#071F18] via-[#0E3328] to-[#08241C] shadow-[0_15px_40px_-10px_rgba(0,0,0,0.8),0_0_30px_rgba(212,175,55,0.2)] min-h-[260px] sm:min-h-[340px] lg:min-h-[400px] flex items-center transition-all duration-300">
+      <div className="relative w-full rounded-2xl sm:rounded-3xl overflow-hidden border-2 border-[#D4AF37]/50 hover:border-[#F5D77F] bg-gradient-to-r from-[#071F18] via-[#0E3328] to-[#08241C] shadow-[0_15px_40px_-10px_rgba(0,0,0,0.8),0_0_30px_rgba(212,175,55,0.2)] min-h-[220px] sm:min-h-[340px] lg:min-h-[400px] flex items-center transition-all duration-300">
         
         {/* Right Side: High Resolution Product Imagery on Emerald Velvet */}
-        <div className="absolute right-0 top-0 bottom-0 w-[55%] sm:w-[50%] lg:w-[48%] overflow-hidden">
+        <div className="absolute right-0 top-0 bottom-0 w-[48%] sm:w-[50%] lg:w-[48%] overflow-hidden">
           {HERO_CARDS.map((card, idx) => (
             <div
               key={card.id}
@@ -82,23 +82,23 @@ export const HeroSection: React.FC = () => {
                 className="w-full h-full object-cover object-center"
               />
               {/* Rich Emerald & Gold Light Vignette */}
-              <div className="absolute inset-0 bg-gradient-to-r from-[#071F18] via-[#071F18]/70 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-r from-[#071F18] via-[#071F18]/60 to-transparent" />
               <div className="absolute inset-0 bg-gradient-to-t from-[#071F18]/90 via-transparent to-black/20" />
             </div>
           ))}
         </div>
 
         {/* Left Side: Editorial Typography & Gold CTA */}
-        <div className="relative z-10 p-6 sm:p-10 lg:p-12 max-w-[65%] sm:max-w-[55%] flex flex-col justify-between h-full space-y-4 sm:space-y-6">
+        <div className="relative z-10 p-4 sm:p-10 lg:p-12 max-w-[58%] sm:max-w-[55%] flex flex-col justify-between h-full space-y-2.5 sm:space-y-6">
           <div>
             {/* Gold Badge */}
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#061B15]/90 border border-[#D4AF37]/60 text-[#F5D77F] text-[10px] sm:text-xs font-brand tracking-[0.25em] mb-3 backdrop-blur-md shadow-md">
-              <Sparkles className="w-3.5 h-3.5 text-[#D4AF37]" />
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#061B15]/90 border border-[#D4AF37]/60 text-[#F5D77F] text-[9px] sm:text-xs font-brand tracking-[0.2em] mb-1.5 sm:mb-3 backdrop-blur-md shadow-md">
+              <Sparkles className="w-3 h-3 text-[#D4AF37]" />
               <span>{current.badge}</span>
             </div>
 
             {/* Title */}
-            <h1 className="text-2xl sm:text-4xl lg:text-5xl font-serif-luxury font-medium text-[#FFFDF7] leading-[1.08] tracking-tight">
+            <h1 className="text-xl sm:text-4xl lg:text-5xl font-serif-luxury font-medium text-[#FFFDF7] leading-[1.08] tracking-tight">
               {current.titleLines.map((line, i) => (
                 <span key={i} className="block">
                   {line}
@@ -107,7 +107,7 @@ export const HeroSection: React.FC = () => {
             </h1>
 
             {/* Subtitle */}
-            <p className="text-xs sm:text-sm lg:text-base text-[#E8D5B7]/90 mt-2 sm:mt-3 line-clamp-2 leading-relaxed font-light max-w-md">
+            <p className="text-[11px] sm:text-sm lg:text-base text-[#E8D5B7]/90 mt-1 sm:mt-3 line-clamp-2 leading-relaxed font-light max-w-md">
               {current.subtitle}
             </p>
           </div>
@@ -116,10 +116,10 @@ export const HeroSection: React.FC = () => {
             {/* Pill CTA button in Radiant Gold */}
             <button
               onClick={handleCtaClick}
-              className="inline-flex items-center gap-2 px-6 sm:px-8 py-3 sm:py-3.5 rounded-full gold-foil-bg text-[#061B15] font-bold text-xs sm:text-sm tracking-wider uppercase shadow-[0_8px_25px_rgba(212,175,55,0.4)] hover:brightness-110 transition-all cursor-pointer group"
+              className="inline-flex items-center gap-1.5 px-4 sm:px-8 py-2 sm:py-3.5 rounded-full gold-foil-bg text-[#061B15] font-bold text-[11px] sm:text-sm tracking-wider uppercase shadow-[0_8px_25px_rgba(212,175,55,0.4)] hover:brightness-110 active:scale-95 transition-all cursor-pointer group"
             >
               <span>{current.ctaText}</span>
-              <ArrowRight className="w-4 h-4 text-[#061B15] group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#061B15] group-hover:translate-x-1 transition-transform" />
             </button>
           </div>
         </div>

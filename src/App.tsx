@@ -22,7 +22,8 @@ import { AdminLoginModal } from './components/admin/AdminLoginModal';
 import { AdminDashboard } from './components/admin/AdminDashboard';
 import { AccountModal } from './components/account/AccountModal';
 import { ToastContainer } from './components/common/ToastContainer';
-import { Sparkles } from 'lucide-react';
+import { PWAInstallPrompt } from './components/common/PWAInstallPrompt';
+import { Sparkles, Download } from 'lucide-react';
 import type { CategoryId } from './types';
 
 const MainLayout: React.FC = () => {
@@ -133,6 +134,9 @@ const MainLayout: React.FC = () => {
           onClose={() => setSelectedProduct(null)}
         />
       )}
+
+      {/* PWA Install Notification */}
+      <PWAInstallPrompt />
 
       {/* Toast notifications */}
       <ToastContainer />

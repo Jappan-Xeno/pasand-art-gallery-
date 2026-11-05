@@ -15,6 +15,7 @@ import {
   Plus,
   Minus,
   Sparkles,
+  MessageCircle,
 } from 'lucide-react';
 
 interface ProductDetailsModalProps {
@@ -54,6 +55,28 @@ export const ProductDetailsModal: React.FC<ProductDetailsModalProps> = ({ produc
     addToCart(product, quantity, selectedVariant);
     onClose();
     setIsCheckoutOpen(true);
+  };
+
+  const handleDirectWhatsAppBuy = () => {
+    const variantStr = selectedVariant ? ` (${selectedVariant.name})` : '';
+    const totalAmount = product.price * quantity;
+    const msg = `✨ *INSTANT ORDER — PASAND ART GALLERY* ✨\n\n` +
+      `Hello! I want to order from the boutique:\n` +
+      `• *Item:* ${product.name}${variantStr}\n` +
+      `• *Quantity:* ${quantity}\n` +
+      `• *Total Price:* ${settings.currencySymbol}${totalAmount.toLocaleString('en-IN')}\n\n` +
+      `Please confirm stock availability and share dispatch schedule. Thank you!`;
+
+    const encoded = encodeURIComponent(msg);
+    const cleanNumber = settings.whatsappNumber.replace(/[^0-9]/g, '');
+    const url = `https://wa.me/${cleanNumber}?text=${encoded}`;
+    
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    if (isMobile) {
+      window.location.href = url;
+    } else {
+      window.open(url, '_blank');
+    }
   };
 
   const handleShare = () => {
@@ -316,21 +339,32 @@ export const ProductDetailsModal: React.FC<ProductDetailsModalProps> = ({ produc
 
               {/* Action Buttons matching reference screen 4:
                   Add to Cart (outline gold) + Buy Now (gold gradient) */}
-              <div className="grid grid-cols-2 gap-3.5 pt-2">
-                <button
-                  onClick={handleAddToCart}
-                  className="py-4 px-4 rounded-2xl border-2 border-[#D4AF37] text-[#F5D77F] hover:bg-[#D4AF37] hover:text-[#061B15] font-bold text-xs sm:text-sm tracking-wider uppercase transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md"
-                >
-                  <ShoppingBag className="w-4 h-4" />
-                  <span>Add to Cart</span>
-                </button>
+              <div className="space-y-2.5 pt-2">
+                <div className="grid grid-cols-2 gap-3">
+                  <button
+                    onClick={handleAddToCart}
+                    className="py-3.5 px-3 rounded-2xl border-2 border-[#D4AF37] text-[#F5D77F] hover:bg-[#D4AF37] hover:text-[#061B15] font-bold text-xs sm:text-sm tracking-wider uppercase transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-md"
+                  >
+                    <ShoppingBag className="w-4 h-4" />
+                    <span>Add to Bag</span>
+                  </button>
 
+                  <button
+                    onClick={handleBuyNow}
+                    className="py-3.5 px-3 rounded-2xl gold-foil-bg text-[#061B15] hover:brightness-110 font-bold text-xs sm:text-sm tracking-wider uppercase transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-[0_8px_25px_rgba(212,175,55,0.4)]"
+                  >
+                    <Sparkles className="w-4 h-4 text-[#061B15]" />
+                    <span>Buy Now</span>
+                  </button>
+                </div>
+
+                {/* Direct 1-Click WhatsApp Purchase */}
                 <button
-                  onClick={handleBuyNow}
-                  className="py-4 px-4 rounded-2xl gold-foil-bg text-[#061B15] hover:brightness-110 font-bold text-xs sm:text-sm tracking-wider uppercase transition-all flex items-center justify-center gap-2 cursor-pointer shadow-[0_8px_25px_rgba(212,175,55,0.4)]"
+                  onClick={handleDirectWhatsAppBuy}
+                  className="w-full py-3.5 px-4 rounded-2xl bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white font-bold text-xs sm:text-sm tracking-wider uppercase transition-all flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-emerald-950/40"
                 >
-                  <Sparkles className="w-4 h-4 text-[#061B15]" />
-                  <span>Buy Now</span>
+                  <MessageCircle className="w-4 h-4 fill-current" />
+                  <span>Instant Order on WhatsApp</span>
                 </button>
               </div>
             </div>

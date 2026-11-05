@@ -52,16 +52,16 @@ export const HomeSearchBar: React.FC = () => {
   };
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-2">
+    <div className="w-full max-w-7xl mx-auto px-3.5 sm:px-6 lg:px-8 pt-3 sm:pt-4 pb-2 max-w-full overflow-hidden">
       <div
         onClick={() => setIsSearchOpen(true)}
-        className="group relative flex items-center justify-between w-full h-13 px-5 rounded-2xl bg-[#0B251E] border-2 border-[#D4AF37]/50 hover:border-[#F5D77F] shadow-[0_8px_25px_rgba(0,0,0,0.5),0_0_15px_rgba(212,175,55,0.15)] cursor-pointer backdrop-blur-md transition-all duration-300"
+        className="group relative flex items-center justify-between w-full h-12 sm:h-13 px-3.5 sm:px-5 rounded-xl sm:rounded-2xl bg-[#0B251E] border-2 border-[#D4AF37]/50 hover:border-[#F5D77F] shadow-[0_8px_25px_rgba(0,0,0,0.5),0_0_15px_rgba(212,175,55,0.15)] cursor-pointer backdrop-blur-md transition-all duration-300"
       >
         {/* Left: Gold Search Icon & Placeholder */}
-        <div className="flex items-center gap-3.5 min-w-0 flex-1">
-          <Search className="w-5 h-5 text-[#F5D77F] shrink-0" />
+        <div className="flex items-center gap-2.5 sm:gap-3.5 min-w-0 flex-1">
+          <Search className="w-4 h-4 sm:w-5 sm:h-5 text-[#F5D77F] shrink-0" />
           <span className="text-xs sm:text-sm text-[#E8D5B7]/80 truncate font-light tracking-wide">
-            Search for jewellery, perfumes, cosmetics, accessories...
+            Search jewellery, perfumes, cosmetics...
           </span>
         </div>
 
@@ -69,7 +69,7 @@ export const HomeSearchBar: React.FC = () => {
         <button
           type="button"
           onClick={handleVoiceSearch}
-          className={`p-2 rounded-xl transition-all shrink-0 ${
+          className={`p-1.5 sm:p-2 rounded-xl transition-all shrink-0 ${
             isListening
               ? 'text-red-400 bg-red-950/60 animate-pulse'
               : 'text-[#F5D77F] hover:bg-[#D4AF37]/20 hover:scale-105'
