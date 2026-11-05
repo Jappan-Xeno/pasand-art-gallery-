@@ -1,0 +1,98 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --color-emerald-deep: #061B15;
+    --color-emerald-primary: #0C2820;
+    --color-emerald-surface: #103328;
+    --color-emerald-card: #143D31;
+    --color-gold-antique: #C6A15B;
+    --color-gold-metallic: #D4AF37;
+    --color-gold-bright: #F5D77F;
+    --color-gold-champagne: #E8D5B7;
+    --color-gold-light: #FFF4D0;
+    --color-ivory-warm: #FFFDF7;
+  }
+
+  body {
+    background-color: #061B15;
+    color: #FFFDF7;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+
+  h1, h2, h3, h4, .font-serif-luxury {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+  }
+
+  .font-brand {
+    font-family: 'Cinzel', serif;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #061B15;
+}
+::-webkit-scrollbar-thumb {
+  background: #C6A15B60;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #D4AF37;
+}
+
+/* Radiant Gold Gradient Styles */
+.gold-foil-bg {
+  background: linear-gradient(135deg, #FFF0BD 0%, #E5C158 25%, #C6A15B 60%, #996515 90%, #E5C158 100%);
+}
+
+.gold-foil-text {
+  background: linear-gradient(135deg, #FFF9E6 0%, #F5D77F 25%, #C6A15B 60%, #E5C158 85%, #FFFDF7 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.gold-border-rich {
+  border-color: rgba(212, 175, 55, 0.45);
+}
+
+.gold-border-glow {
+  border-color: rgba(212, 175, 55, 0.7);
+  box-shadow: 0 0 20px rgba(198, 161, 91, 0.25);
+}
+
+.gold-glow-box {
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.7), 0 0 25px rgba(212, 175, 55, 0.2);
+}
+
+.gold-glow-ambient {
+  background: radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.15) 0%, transparent 70%);
+}
+
+.luxury-gold-card {
+  background: linear-gradient(160deg, #103328 0%, #09241C 100%);
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(245, 215, 127, 0.15);
+}
+
+.luxury-gold-card:hover {
+  border-color: rgba(245, 215, 127, 0.7);
+  box-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.7), 0 0 25px rgba(198, 161, 91, 0.3);
+}
+
+@keyframes pulseGoldGlow {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(245, 215, 127, 0.6);
+  }
+}
+
+.animate-gold-pulse {
+  animation: pulseGoldGlow 3s ease-in-out infinite;
+}
